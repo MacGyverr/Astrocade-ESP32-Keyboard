@@ -3,15 +3,13 @@
 This is **PlatformIO + ESP-IDF**, not an Arduino-framework project.
 PlatformIO invokes ESP-IDF's build/component manager automatically.
 
-| File/folder | Role | Commit it? |
+| File/folder | Role |
 |---|---|---|
-| `platformio.ini` | Board, pinned platform, flags, upload settings | Yes |
-| `src/idf_component.yml` | Direct ESP-IDF component requirements | Yes |
-| `dependencies.lock`, `dependencies.esp32.lock` | Exact S3/classic versions and registry hashes | Yes |
-| `sdkconfig.defaults`, `sdkconfig.defaults.esp32s3`, `sdkconfig.defaults.esp32` | Common and target-specific framework configuration | Yes |
-| `managed_components/` | Automatically downloaded component source | No |
-| `.pio/` | Build outputs and local build metadata | No |
-| `sdkconfig.<environment>` | Locally generated framework configuration | No |
+| `platformio.ini` | Board, pinned platform, flags, upload settings | 
+| `src/idf_component.yml` | Direct ESP-IDF component requirements | 
+| `dependencies.lock`, `dependencies.esp32.lock` | Exact S3/classic versions and registry hashes | 
+| `sdkconfig.defaults`, `sdkconfig.defaults.esp32s3`, `sdkconfig.defaults.esp32` | Common and target-specific framework configuration | 
+
 
 ## Stock components
 
@@ -44,11 +42,6 @@ dependencies. Their dependency declaration is `idf_component.yml`, with
 the target lockfile recording the result. `lib_deps` is not a drop-in replacement
 for that integration. Keep a single source of dependency truth.
 
-You may remove the local `managed_components` cache when no build is running;
-the next build will fetch it again. Removing it is unnecessary for GitHub because
-it is ignored. Never keep your own changes there: modify project code or propose
-an upstream fix. If a component was previously tracked by Git, adding it to
-`.gitignore` alone does not untrack it; review the Git index before publishing.
 
 ## Updating
 

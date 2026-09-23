@@ -54,3 +54,4 @@ It checks the image format/target, not a cryptographic publisher signature.
 Use only firmware from a trusted source on a trusted network.
 
 ![ota example](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/ota-example.png)
+![ota example](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/ota-4mb-example.png)

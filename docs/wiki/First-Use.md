@@ -53,6 +53,7 @@ debug off. mDNS uses **.local**; the short hostname alone is not guaranteed.
 ![network example](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/network-example.png)
 
 ![Phone setup AP and portal](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/AP-setup.png)
+![Phone setup AP and portal2](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/phone-wifi-setup.jpg)
 
 USB keyboard steps apply only to the full S3 build. BLE and web text input work
 independently on all profiles. The page's status strip shows each keyboard's
