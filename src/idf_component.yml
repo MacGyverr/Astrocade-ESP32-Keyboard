@@ -1,0 +1,8 @@
+dependencies:
+  idf: ">=6.1"
+  espressif/usb_host_hid:
+    version: "1.2.1"
+    rules:
+      - if: target == esp32s3
+  espressif/mdns: "1.13.1"
+  espressif/cjson: "1.7.19"

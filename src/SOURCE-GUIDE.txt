@@ -1,0 +1,76 @@
+ASTROCADE KEYBOARD - SOURCE GUIDE
+
+Startup and hardware
+  main.cpp              Initializes storage, keypad output, USB, BLE and web.
+                        Core keypad failures halt; input services are independent.
+  crosspoint.cpp        Sole GPIO-level crosspoint driver: address/data/strobe,
+                        reference-counted closures, clear-all and queued debug logs.
+  status_led.cpp        Background RGB patterns and input activity indications.
+  settings.cpp          Persistent application/overlay settings in NVS.
+
+Keyboard input
+  usb_keyboard.cpp      Stock USB HID host integration, boot reports, lock LEDs,
+                        attach/detach handling and input routing.
+                        Compiled out when ASTROCADE_USB_ENABLED=0.
+  ble_transport.c       Stock NimBLE central integration: scan, security/bonds,
+                        reconnect, HID discovery/subscription and report decoding.
+                        This is project code, not a patched ESP-IDF driver.
+  ble_keyboard.cpp      C/C++ bridge from BLE transport to keyboard router,
+                        lock states, reset button, LEDs and serial notices.
+  keyboard_router.cpp   Per-source HID state, key up/down events, key names,
+                        modifiers, Caps/Num state and keypad normalization.
+  keyboard_status.cpp   Thread-safe USB/BLE connection/name snapshots for web UI.
+                        Updated on connection events, not in timed output paths.
+
+Overlay and web
+  overlay_basic.cpp     Bally BASIC mapping and the dedicated timed action worker.
+                        Owns physical and pasted-text scheduling, pause/cancel,
+                        and the transfer/maintenance exclusion rules.
+  overlay_catalog.cpp   Overlay registration. BASIC is the only current entry.
+  web_portal.cpp        Wi-Fi setup/reconnect, mDNS, HTTP assets/API, validation,
+                        text-plan submission, admin checks, OTA and captive setup.
+                        Must not perform timed keypad pulses in HTTP handlers.
+  captive_dns.cpp       Bounded DNS packet replies for setup-network discovery.
+
+Build files in this directory
+  CMakeLists.txt        Registers source files, ESP-IDF requirements and web assets.
+  idf_component.yml     Downloads stock third-party ESP-IDF components automatically.
+
+Important headers in ../include
+  app_config.h          Build-flag defaults, constants and configuration checks.
+                        Configurable S3/classic crosspoint GPIO maps, build/model
+                        identity, RGB opt-in and duplicate/reserved-pin checks.
+  keyboard_status.h     C-compatible connection status shared by BLE, USB and web.
+  app_log.h             APP_NOTICE always prints; APP_LOG depends on debug flag.
+  input_source.h        Input-source identifiers shared by keyboard paths.
+  ble_report.h          BLE keyboard report normalization helpers.
+  text_compiler.h       UTF-8/newline handling and complete text validation.
+  text_transfer.h       Job status, pause/resume/cancel and maintenance contract.
+  Other .h files        Public interfaces for their matching source modules.
+
+Browser files in ../web
+  index.html            Send, Network and Firmware page structure and icons.
+  app.js                Browser state, API calls, validation display and uploads.
+  style.css             Responsive styling. Assets are embedded at build time;
+                        no external CDN, npm installation or filesystem upload.
+
+Tests and architecture
+  ../test/ble_report_test.cpp  Compile-time report-conversion assertions.
+  ../test/crosspoint_config_test.cpp  Pin-map validation assertions.
+  ../test/classic_config_test.cpp  Classic pin safety and RGB-off assertions.
+  ../test/web_status_test.py  Optional Playwright checks of web status and layouts.
+  ../tools/build_version.py  Sets ESP-IDF image version from the INI build flag.
+  ../sdkconfig.defaults*  Common plus S3/classic memory/console SDK settings.
+  ../platformio.ini     Full S3, BLE/Wi-Fi S3, and classic 4 MB build profiles.
+
+  USB / BLE -> keyboard_router -> overlay_basic worker -> crosspoint -> Bally
+  Browser -> web_portal -> text_compiler -> overlay_basic worker -> crosspoint
+
+Maintenance rules
+  - Keep hardware timing in the action worker/crosspoint, not network callbacks.
+  - Never modify managed_components or installed framework/toolchain sources.
+  - Add a new source file to src/CMakeLists.txt.
+  - Update BASIC_MAPPING.md when changing key translations.
+  - Update WIRING.md if GPIO assignments change.
+  - Keep dependency declarations and both target lockfiles together.
+  - Test source disconnects, BLE reconnects and output release after changes.

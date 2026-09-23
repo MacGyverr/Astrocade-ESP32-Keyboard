@@ -1,10 +1,13 @@
 # Astrocade USB + BLE BASIC Keyboard Adapter (untested WIP)
 
 What is it?
-It lets you take a ESP32 and a Crosspoint DIP and "program" the Bally keypad with all the keys available with the Basic Overlay from either a USB or BLE (Bluetooth Loe-Energy) keyboard or via a web interface where you can just drop BASIC text in a text box and hit "Send".
-At its core it presses the keypad buttons singularly and in combinations in response to real keyboard input.
-The crosspoint chip is connecting the 10 wire matrix keypad (5 x 5 rows and columns) to match a key(s) being pressed.
-You type a "Q" on the keyboard, and the ESP32 tells the Crosspoint to press and hold down key "0" and then key "8" on the keypad.
+It lets you take an ESP32 and a crosspoint DIP and "program" the Bally keypad with all the keys available with the BASIC overlay, using either a USB or BLE (Bluetooth Low Energy) keyboard or a web interface where you can just drop BASIC text into a text box and hit "Send".
+
+At its core, it presses the keypad buttons individually and in combinations in response to real keyboard input.
+
+The crosspoint chip connects the 10-wire keypad matrix (5 rows × 5 columns) to simulate a key or combination of keys being pressed.
+
+You type a "Q" on the keyboard, and the ESP32 tells the crosspoint to press and hold key "0" and then press key "8" on the keypad.
 
 ![keypad](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/emulation_overlay.jpg)
 

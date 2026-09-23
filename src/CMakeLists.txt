@@ -1,0 +1,34 @@
+idf_component_register(
+    SRCS
+        "main.cpp"
+        "crosspoint.cpp"
+        "settings.cpp"
+        "overlay_basic.cpp"
+        "keyboard_router.cpp"
+        "keyboard_status.cpp"
+        "status_led.cpp"
+        "usb_keyboard.cpp"
+        "ble_keyboard.cpp"
+        "ble_transport.c"
+        "overlay_catalog.cpp"
+        "web_portal.cpp"
+        "captive_dns.cpp"
+    INCLUDE_DIRS
+        "../include"
+    REQUIRES
+        nvs_flash
+        bt
+        esp_hid
+        esp_driver_rmt
+        esp_wifi
+        esp_netif
+        esp_http_server
+        app_update
+        esp_timer
+        mdns
+        cjson
+    EMBED_FILES
+        "../web/index.html"
+        "../web/app.js"
+        "../web/style.css"
+)
