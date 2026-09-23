@@ -1,4 +1,4 @@
-# Astrocade USB + BLE BASIC Keyboard Adapter
+# Astrocade USB + BLE BASIC Keyboard Adapter (untested WIP)
 
 This PlatformIO / ESP-IDF project supports ESP32-S3-WROOM-1-N8R2 boards and
 classic ESP32-WROOM-32-family 4 MB boards. It drives a CD74HCT22106E
@@ -8,6 +8,8 @@ Astrocade 24-key keypad while accepting:
 - a wired USB HID Boot keyboard (full S3 build only);
 - a Bluetooth Low Energy HID keyboard;
 - BASIC text pasted into the adapter's web page.
+
+This was almostly completely written in a day mostly using ChatGPT Astra.
 
 Includes Wi-Fi setup, BASIC text validation and paced transfer, and wireless
 firmware updates. BASIC is the current overlay; more overlays are planned.
@@ -23,7 +25,7 @@ For maintainers: [Source guide](src/SOURCE-GUIDE.txt),
 [publishing checklist](docs/PUBLISHING.md), and
 [image catalog](docs/images/README.md).
 
-![proto board](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/proto-board.png)
+![ESP32-Crosspoint Wiring](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/wiring-diagram.png)
 ![web example](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/web-example.png)
 
 Bluetooth Classic keyboards are not supported by ESP32-S3 hardware. A keyboard
@@ -36,16 +38,6 @@ The original Astrocade keypad remains connected in parallel.
 ## Build from a fresh clone
 
 Open this folder in VS Code with the PlatformIO extension and run Build.
-Or connect the board's **CH343 COM/UART** USB port with a data cable and choose
-Upload: PlatformIO builds first, then flashes. Select the correct serial port
-if several boards are connected. Some systems need a CH343 driver or serial
-port permissions; those OS requirements are separate from firmware libraries.
-Internet access is needed for the first build: PlatformIO installs the pinned
-ESP32 platform/toolchain, and ESP-IDF's component manager downloads USB HID,
-mDNS, and cJSON from `src/idf_component.yml`. No factory-driver patches or
-manual library installation are needed. Keep `sdkconfig.defaults*` and
-`dependencies*.lock` in the repository; `managed_components/` and `.pio/`
-are generated and should not be committed.
 
 `ASTROCADE_SERIAL_DEBUG_ENABLED=0` silences per-key and diagnostic logs, but
 boot, pairing-code, keyboard-ready, AP credentials, admin-key, and joined
@@ -257,17 +249,9 @@ The S3 profiles use `partitions_8mb.csv` and `sdkconfig.defaults.esp32s3`:
 `partitions_4mb.csv` and `sdkconfig.defaults.esp32`: 4 MB flash, no PSRAM.
 Common SDK settings are in `sdkconfig.defaults`.
 
-Firmware version defaults to `1.0.0`, configured by
-`ASTROCADE_FIRMWARE_VERSION` in `platformio.ini`. The web page reports that
-version, build profile, detected flash size, and live USB/BLE connection names.
-The board label comes from the selected build, not automatic PCB identification.
-
 If the development board has a different flash size, change the PlatformIO
 flash-size setting and partition table before flashing.
 
-PlatformIO's build summary reports static internal SRAM usage. Even with PSRAM
-enabled, the RAM percentage line is expected to use the ESP32-S3 internal RAM
-budget rather than adding the 2 MB external PSRAM pool.
 
 ## Build
 
@@ -275,17 +259,7 @@ Open this directory in VS Code with PlatformIO installed, then:
 
     PlatformIO: Build
 
-or from a PlatformIO terminal:
-
-    pio run
-
-Flash with:
-
-    pio run -t upload
-
 The serial monitor is useful for USB/BLE diagnostics:
-
-    pio device monitor -b 115200
 
 ## Current BLE keyboard compatibility
 
@@ -326,11 +300,7 @@ The external CD74HCT22106 MR/reset hardware from the original design remains
 the hardware-level protection against an ESP reset leaving a keypad crosspoint
 closed.
 
-## Licensing and community
-
-Project license selection is pending; add the chosen LICENSE before publishing
-this as an open-source release. Third-party components keep their own licenses;
-see [THIRD_PARTY.md](THIRD_PARTY.md).
+## Community
 
 This is an independent community project, not an official Bally product.
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes and
