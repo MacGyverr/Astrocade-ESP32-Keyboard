@@ -1,5 +1,13 @@
 # Astrocade USB + BLE BASIC Keyboard Adapter (untested WIP)
 
+What is it?
+It lets you take a ESP32 and a Crosspoint DIP and "program" the Bally keypad with all the keys available with the Basic Overlay from either a USB or BLE (Bluetooth Loe-Energy) keyboard or via a web interface where you can just drop BASIC text in a text box and hit "Send".
+At its core it presses the keypad buttons singularly and in combinations in response to real keyboard input.
+The crosspoint chip is connecting the 10 wire matrix keypad (5 x 5 rows and columns) to match a key(s) being pressed.
+You type a "Q" on the keyboard, and the ESP32 tells the Crosspoint to press and hold down key "0" and then key "8" on the keypad.
+
+![keypad](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/emulation_overlay.jpg)
+
 This PlatformIO / ESP-IDF project supports ESP32-S3-WROOM-1-N8R2 boards and
 classic ESP32-WROOM-32-family 4 MB boards. It drives a CD74HCT22106E
 crosspoint switch to emulate the Bally
@@ -9,7 +17,7 @@ Astrocade 24-key keypad while accepting:
 - a Bluetooth Low Energy HID keyboard;
 - BASIC text pasted into the adapter's web page.
 
-This was almostly completely written in a day mostly using ChatGPT Astra.
+This was almostly completely written in a day mostly using ChatGPT Astra so it's pretty much slop, but it also works and does what I wanted it to.
 
 Includes Wi-Fi setup, BASIC text validation and paced transfer, and wireless
 firmware updates. BASIC is the current overlay; more overlays are planned.
@@ -280,12 +288,6 @@ The K380s seven-byte report is also accepted by inserting the reserved byte.
 The stock HID descriptor parser identifies the keyboard report so media and
 vendor reports are ignored. Proprietary/NKRO-only layouts still require a
 separate decoder.
-
-Compile-time report conversion checks (from a PlatformIO terminal):
-
-```powershell
-& "$env:USERPROFILE\.platformio\packages\toolchain-xtensa-esp-elf\bin\xtensa-esp32s3-elf-g++.exe" -std=c++17 -Wall -Wextra -Werror -Iinclude -fsyntax-only test/ble_report_test.cpp
-```
 
 ## Safety behavior
 
