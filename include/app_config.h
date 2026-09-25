@@ -27,28 +27,28 @@
 #endif
 
 #ifndef ASTROCADE_CROSSPOINT_A0_GPIO
-#define ASTROCADE_CROSSPOINT_A0_GPIO 15
+#define ASTROCADE_CROSSPOINT_A0_GPIO 8
 #endif
 #ifndef ASTROCADE_CROSSPOINT_A1_GPIO
-#define ASTROCADE_CROSSPOINT_A1_GPIO 7
+#define ASTROCADE_CROSSPOINT_A1_GPIO 18
 #endif
 #ifndef ASTROCADE_CROSSPOINT_A2_GPIO
-#define ASTROCADE_CROSSPOINT_A2_GPIO 6
+#define ASTROCADE_CROSSPOINT_A2_GPIO 17
 #endif
 #ifndef ASTROCADE_CROSSPOINT_A3_GPIO
-#define ASTROCADE_CROSSPOINT_A3_GPIO 5
+#define ASTROCADE_CROSSPOINT_A3_GPIO 16
 #endif
 #ifndef ASTROCADE_CROSSPOINT_A4_GPIO
-#define ASTROCADE_CROSSPOINT_A4_GPIO 4
+#define ASTROCADE_CROSSPOINT_A4_GPIO 15
 #endif
 #ifndef ASTROCADE_CROSSPOINT_A5_GPIO
-#define ASTROCADE_CROSSPOINT_A5_GPIO 16
+#define ASTROCADE_CROSSPOINT_A5_GPIO 7
 #endif
 #ifndef ASTROCADE_CROSSPOINT_DATA_GPIO
-#define ASTROCADE_CROSSPOINT_DATA_GPIO 17
+#define ASTROCADE_CROSSPOINT_DATA_GPIO 5
 #endif
 #ifndef ASTROCADE_CROSSPOINT_STROBE_GPIO
-#define ASTROCADE_CROSSPOINT_STROBE_GPIO 18
+#define ASTROCADE_CROSSPOINT_STROBE_GPIO 4
 #endif
 
 #ifndef ASTROCADE_WEB_ENABLED
@@ -198,7 +198,9 @@ namespace AppConfig
             const int pin = pins[i];
             // Reserve each module family's memory, straps, console and board functions.
 #if ASTROCADE_CLASSIC_ESP32
-            if (!(pin == 4 || pin == 13 || pin == 14 || pin == 18 || pin == 19 ||
+            // The documented A0 circuit holds GPIO12 low during flash-voltage strapping.
+            // Do not permit it as STROBE, whose external pull-up would select 1.8 V.
+            if (!((pin == 12 && i == 0) || pin == 4 || pin == 13 || pin == 14 || pin == 18 || pin == 19 ||
                   (pin >= 21 && pin <= 23) || (pin >= 25 && pin <= 27) ||
                   pin == 32 || pin == 33)) return false;
 #else

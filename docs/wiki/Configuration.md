@@ -14,14 +14,14 @@ Wi-Fi, OTA, or the CH343 serial console. No separate source fork is needed.
 Both S3 profiles inherit these defaults from `[s3]`:
 
 ```ini
--DASTROCADE_CROSSPOINT_A0_GPIO=15
--DASTROCADE_CROSSPOINT_A1_GPIO=7
--DASTROCADE_CROSSPOINT_A2_GPIO=6
--DASTROCADE_CROSSPOINT_A3_GPIO=5
--DASTROCADE_CROSSPOINT_A4_GPIO=4
--DASTROCADE_CROSSPOINT_A5_GPIO=16
--DASTROCADE_CROSSPOINT_DATA_GPIO=17
--DASTROCADE_CROSSPOINT_STROBE_GPIO=18
+-DASTROCADE_CROSSPOINT_A0_GPIO=8
+-DASTROCADE_CROSSPOINT_A1_GPIO=18
+-DASTROCADE_CROSSPOINT_A2_GPIO=17
+-DASTROCADE_CROSSPOINT_A3_GPIO=16
+-DASTROCADE_CROSSPOINT_A4_GPIO=15
+-DASTROCADE_CROSSPOINT_A5_GPIO=7
+-DASTROCADE_CROSSPOINT_DATA_GPIO=5
+-DASTROCADE_CROSSPOINT_STROBE_GPIO=4
 ```
 
 Edit the existing profile values to match your wiring. These are **ESP32 GPIO
@@ -37,9 +37,12 @@ compile-time checks cannot discover board-specific connections. GPIO39-42 are
 also used by external JTAG, so do not share them with an active JTAG probe.
 
 The classic ESP32 profile overrides all eight pins with its own safe map in
-`platformio.ini`: A0=18, A1=19, A2=21, A3=22, A4=23, A5=25, DATA=26,
-STROBE=27. Its validator rejects flash, input-only, UART, and boot-strap pins.
-See [the wiring table](../../WIRING.md); S3 and classic wiring are not interchangeable.
+`platformio.ini`: A0=12, A1=14, A2=27, A3=26, A4=25, A5=33, DATA=32,
+STROBE=21. GPIO13 is also suitable for STROBE: change the existing flag and wire
+together; never connect both outputs. The validator rejects flash, input-only,
+UART, and boot-strap pins except GPIO12 specifically as A0. GPIO12 must remain
+low during boot: retain the documented 100 kOhm pull-down and never add a pull-up.
+See [the wiring table](WIRING.md); S3 and classic wiring are not interchangeable.
 
 ## Build identity and RGB
 

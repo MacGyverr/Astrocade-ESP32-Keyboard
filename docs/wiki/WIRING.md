@@ -51,16 +51,26 @@ the series resistor.
 
 | ESP32-S3 pin | Series resistor | CD74HCT22106E pin | Signal | Pull resistor |
 |---|---:|---:|---|---|
-| GPIO4 | 220 Ohm | 28 | A4 | 100 kOhm to GND |
-| GPIO5 | 220 Ohm | 27 | A3 | 100 kOhm to GND |
-| GPIO6 | 220 Ohm | 26 | A2 | 100 kOhm to GND |
-| GPIO7 | 220 Ohm | 25 | A1 | 100 kOhm to GND |
-| GPIO15 | 220 Ohm | 24 | A0 | 100 kOhm to GND |
-| GPIO16 | 220 Ohm | 1 | A5 | 100 kOhm to GND |
-| GPIO17 | 220 Ohm | 4 | DATA | 100 kOhm to GND |
-| GPIO18 | 220 Ohm | 2 | STROBE | 10 kOhm to ESP32 3V3 |
+| GPIO4 | 220 Ohm | 2 | STROBE | 10 kOhm to ESP32 3V3 |
+| GPIO5 | 220 Ohm | 4 | DATA | 100 kOhm to GND |
+| GPIO7 | 220 Ohm | 1 | A5 | 100 kOhm to GND |
+| GPIO15 | 220 Ohm | 28 | A4 | 100 kOhm to GND |
+| GPIO16 | 220 Ohm | 27 | A3 | 100 kOhm to GND |
+| GPIO17 | 220 Ohm | 26 | A2 | 100 kOhm to GND |
+| GPIO18 | 220 Ohm | 25 | A1 | 100 kOhm to GND |
+| GPIO8 | 220 Ohm | 24 | A0 | 100 kOhm to GND |
 
-Do not pull STROBE up to +5 V, because GPIO18 is still connected to that node.
+The eight selected S3 GPIOs are all input/output-capable per Table 3-1 of the
+[Espressif module datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf).
+They avoid boot straps, flash/PSRAM, UART console GPIO43/44, USB19/20 and RGB48.
+GPIO6 is deliberately skipped. ADC, touch, UART and crystal labels are alternate
+functions; the firmware configures these eight pins as digital outputs.
+
+On the photographed board, viewed from the component side with the antenna up,
+the left header begins: 3V3, 3V3, RST, GPIO4, GPIO5, GPIO6, GPIO7, GPIO15,
+GPIO16, GPIO17, GPIO18, GPIO8. Do not use a generic S3 pinout's physical order.
+
+Do not pull STROBE up to +5 V, because the ESP32 GPIO is still connected to that node.
 Pulling it to ESP32 3V3 is enough for the HCT input high level and avoids
 putting 5 V on an ESP32 pin.
 
@@ -75,25 +85,48 @@ GPIO6/7 on classic ESP32; they are connected to flash.** Keep the same per-line
 
 | Classic ESP32 GPIO | Crosspoint signal | DIP pin | Pull resistor |
 |---:|---|---:|---|
-| 18 | A0 | 24 | 100 kOhm to GND |
-| 19 | A1 | 25 | 100 kOhm to GND |
-| 21 | A2 | 26 | 100 kOhm to GND |
-| 22 | A3 | 27 | 100 kOhm to GND |
-| 23 | A4 | 28 | 100 kOhm to GND |
-| 25 | A5 | 1 | 100 kOhm to GND |
-| 26 | DATA | 4 | 100 kOhm to GND |
-| 27 | STROBE | 2 | 10 kOhm to ESP32 3V3 |
+| 12 | A0 | 24 | 100 kOhm to GND |
+| 14 | A1 | 25 | 100 kOhm to GND |
+| 27 | A2 | 26 | 100 kOhm to GND |
+| 26 | A3 | 27 | 100 kOhm to GND |
+| 25 | A4 | 28 | 100 kOhm to GND |
+| 33 | A5 | 1 | 100 kOhm to GND |
+| 32 | DATA | 4 | 100 kOhm to GND |
+| 21 | STROBE | 2 | 10 kOhm to ESP32 3V3 |
+
+GPIO13 is also suitable for STROBE (left header pin 15 on the pictured 38-pin
+board). To use it instead of GPIO21, change the classic environment's existing
+`ASTROCADE_CROSSPOINT_STROBE_GPIO=21` flag to `13` and move the wire. Keep the
+220 Ohm series resistor and crosspoint-side 10 kOhm pull-up. Connect STROBE to
+only one ESP32 output; the drawing's alternatives must not be joined together.
+
+GPIO12/A0 is a flash-voltage boot strap on classic ESP32. Keep its 100 kOhm
+pull-down and do not connect any pull-up or external high-driving circuit to
+that net during reset. The firmware permits GPIO12 only for this documented A0
+connection, not STROBE. This exception is for the pictured 3.3 V-flash WROOM-32D,
+not a general recommendation for other ESP32 modules.
 
 ### Diagram review
 
-The supplied diagram's eight S3 control connections match the table above,
-including the revised A0/A1/A3/A4 ordering. Wire by GPIO labels, not assumed
-header positions; different boards arrange their headers differently.
+The final classic drawing matches the table above with GPIO21 STROBE; GPIO13
+is the optional alternative. GPIO34-39 are input-only and must never drive STROBE.
+See [Espressif GPIO restrictions](https://docs.espressif.com/projects/esp-faq/en/latest/software-framework/peripherals/gpio.html)
+and [GPIO12 boot behavior](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/sd_pullup_requirements.html).
 
-![S3 crosspoint wiring](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/wiring-diagram.png)
 
-The power drawing needs an explicit Bally/common-GND lead. Its diode from the
-Bally lightpen 5 V supply also needs a voltage/current check: the HCT part
+The revised S3 map above follows the actual board photo and the corrected drawing
+provided by the owner: GPIO4/5 are STROBE/DATA; A5..A0 are GPIO7/15/16/17/18/8.
+
+**Image correction pending:** the saved diagram below still shows the old S3
+header arrangement and old USB connector labels. Do not wire the S3 from that
+image; use the table above until the corrected image replaces it. The classic
+half remains applicable. Wire by GPIO labels, not assumed header positions.
+
+![S3 and classic ESP32 crosspoint drawings](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/wiring-diagram.png)
+
+The updated drawings explicitly label Bally GND. All such symbols must share
+a physical common ground. The diode from the Bally lightpen 5 V supply still
+needs a voltage/current check: the HCT part
 requires **4.5-5.5 V at VDD pin 19**, so diode drop must not take it below 4.5 V
 under load. Verify that the console supply can power the ESP32 and any USB
 keyboard before using it; the diagram alone does not establish that capacity.

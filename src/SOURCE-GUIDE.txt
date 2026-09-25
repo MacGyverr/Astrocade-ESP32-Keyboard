@@ -54,7 +54,9 @@ Browser files in ../web
   style.css             Responsive styling. Assets are embedded at build time;
                         no external CDN, npm installation or filesystem upload.
 
-Tests and architecture
+Optional developer tests and architecture
+  These tests may be omitted from the minimal end-user distribution; firmware
+  compilation does not depend on them.
   ../test/ble_report_test.cpp  Compile-time report-conversion assertions.
   ../test/crosspoint_config_test.cpp  Pin-map validation assertions.
   ../test/classic_config_test.cpp  Classic pin safety and RGB-off assertions.
@@ -70,7 +72,7 @@ Maintenance rules
   - Keep hardware timing in the action worker/crosspoint, not network callbacks.
   - Never modify managed_components or installed framework/toolchain sources.
   - Add a new source file to src/CMakeLists.txt.
-  - Update BASIC_MAPPING.md when changing key translations.
-  - Update WIRING.md if GPIO assignments change.
+  - Update docs/wiki/BASIC_MAPPING.md when changing key translations.
+  - Update docs/wiki/WIRING.md if GPIO assignments change.
   - Keep dependency declarations and both target lockfiles together.
   - Test source disconnects, BLE reconnects and output release after changes.

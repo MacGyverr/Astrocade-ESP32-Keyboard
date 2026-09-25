@@ -15,8 +15,8 @@ are required. Read the wiring guide before connecting vintage hardware.
 7. [Dependencies and maintenance](Dependencies.md)
 
 The wiki lives with the source so it is included in every clone/download.
-It does not depend on GitHub's separate Wiki service. Publication instructions
-and the photo checklist are in `docs/PUBLISHING.md` and `docs/images/README.md`.
+It does not depend on GitHub's separate Wiki service. Wiring and BASIC mappings
+are in [WIRING.md](WIRING.md) and [BASIC_MAPPING.md](BASIC_MAPPING.md).
 
 Only the BASIC overlay is implemented. Other overlays and a Bluetooth
 administration page are future work, not current features.

@@ -28,13 +28,15 @@ firmware updates. BASIC is the current overlay; more overlays are planned.
 **Start here:** [Community wiki](docs/wiki/Home.md) |
 [Build and upload](docs/wiki/Build-and-Upload.md) |
 [First use](docs/wiki/First-Use.md) |
-[Hardware wiring](WIRING.md) |
+[Hardware wiring](docs/wiki/WIRING.md) |
 [Troubleshooting](docs/wiki/Troubleshooting.md)
 
 For maintainers: [Source guide](src/SOURCE-GUIDE.txt),
-[dependencies](docs/wiki/Dependencies.md),
-[publishing checklist](docs/PUBLISHING.md), and
-[image catalog](docs/images/README.md).
+[dependencies](docs/wiki/Dependencies.md).
+
+**S3 image correction pending:** the saved diagram below shows an older header
+layout. Use the current GPIO tables in this README and [WIRING.md](docs/wiki/WIRING.md),
+not the old S3 image positions. The classic ESP32 wiring is unchanged.
 
 ![ESP32-Crosspoint Wiring](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/wiring-diagram.png)
 ![web example](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/web-example.png)
@@ -69,20 +71,25 @@ The eight `ASTROCADE_CROSSPOINT_*_GPIO` flags in `[s3]` change the ESP32 side
 for both S3 profiles. `Astrocade-Keyboard-esp32-4mb-ble-wifi` supports classic
 ESP32 4 MB boards with its own safe GPIO map, no USB host, and RGB disabled.
 **Do not use the S3 wiring on classic ESP32: GPIO6/7 are flash connections.**
+Classic STROBE uses GPIO21, with GPIO13 as a configurable alternative. Its
+GPIO12/A0 connection requires the documented boot pull-down. Follow the
+classic table in [WIRING.md](docs/wiki/WIRING.md), not the S3 table below.
 See [configuration](docs/wiki/Configuration.md) for checks and restrictions.
 
-The following table describes the **default** wiring:
+The following table describes the **default S3 wiring**, checked against the
+actual board's silkscreen. GPIO6 is intentionally unused. A module name alone
+does not identify a development board's header order.
 
 | ESP32-S3 | CD74HCT22106E signal | 28-pin PDIP pin |
 |---|---|---|
-| GPIO4 | A4 | 28 |
-| GPIO5 | A3 | 27 |
-| GPIO6 | A2 | 26 |
-| GPIO7 | A1 | 25 |
-| GPIO15 | A0 | 24 |
-| GPIO16 | A5 | 1 |
-| GPIO17 | DATA | 4 |
-| GPIO18 | STROBE | 2 |
+| GPIO4 | STROBE | 2 |
+| GPIO5 | DATA | 4 |
+| GPIO7 | A5 | 1 |
+| GPIO15 | A4 | 28 |
+| GPIO16 | A3 | 27 |
+| GPIO17 | A2 | 26 |
+| GPIO18 | A1 | 25 |
+| GPIO8 | A0 | 24 |
 | GPIO19 | USB D- |
 | GPIO20 | USB D+ |
 | GPIO48 | on-board RGB LED status |
@@ -92,7 +99,7 @@ the board's native USB-C / OTG connector. GPIO48 is also kept off the
 crosspoint bus because the pictured board maps its built-in RGB LED there.
 
 Package note: the CD74HCT22106E datasheet lists the `E` package as 28-lead
-PDIP. See [WIRING.md](WIRING.md) for the full prototype wiring outline,
+PDIP. See [WIRING.md](docs/wiki/WIRING.md) for the full prototype wiring outline,
 including power, reset, pull resistors, and the Bally matrix lines.
 
 ## BLE enrollment and reconnect
@@ -266,10 +273,7 @@ flash-size setting and partition table before flashing.
 
 ## Build
 
-Open this directory in VS Code with PlatformIO installed, then:
-
-    PlatformIO: Build
-
+Open this directory in VS Code with PlatformIO installed, then build.
 The serial monitor is useful for USB/BLE diagnostics:
 
 ## Current BLE keyboard compatibility
@@ -308,5 +312,3 @@ closed.
 ## Community
 
 This is an independent community project, not an official Bally product.
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes and
-[SECURITY.md](SECURITY.md) before placing the adapter on a network.

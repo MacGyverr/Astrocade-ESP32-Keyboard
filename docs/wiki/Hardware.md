@@ -27,6 +27,11 @@ in a second wiring document that could become inconsistent.
    in `WIRING.md`. Do not connect independent 5 V supplies together casually.
 
 Native USB uses GPIO19 D- and GPIO20 D+. The CH343 COM port is separate.
+On the owner's photographed board (component side, antenna up), the wiring
+reference identifies the left connector as native USB/OTG and the right as
+CH343 COM. Identify by the actual board routing/device enumeration, not the
+USB labels on a generic pinout graphic. Never test a powered host-VBUS port
+against a PC port.
 A keyboard needs both a USB host data path and 5 V VBUS. This particular tested
 board required its USB-OTG solder bridge for keyboard power. Do not assume the
 same bridge is safe or required on another board revision. With host VBUS enabled,
@@ -36,6 +41,13 @@ The connector's schematic row/column labels matter more than the order of a
 custom ten-wire harness. ESP32 GPIOs must not receive 5 V.
 
 ![esp32 model](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/esp32-model.png)
+The S3 GPIO table in [WIRING.md](WIRING.md) follows the actual board photo;
+its left header starts 3V3, 3V3, RST, GPIO4, GPIO5, GPIO6, GPIO7. The saved
+combined diagram below still has the old S3 header/USB labels and must be
+replaced before using its S3 half as a construction guide.
+Classic ESP32 still uses GPIO21 STROBE; GPIO13 is an alternative when its
+build flag and wiring both change. GPIO12/A0 requires its boot pull-down.
+
 ![wiring diagram](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/wiring-diagram.png)
 ![Bally keypad wiring](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/bally-keypad-wiring.png)
 ![proto board](https://raw.githubusercontent.com/MacGyverr/Astrocade-ESP32-Keyboard/main/docs/images/proto-board.png)

@@ -4,8 +4,9 @@ This is **PlatformIO + ESP-IDF**, not an Arduino-framework project.
 PlatformIO invokes ESP-IDF's build/component manager automatically.
 
 | File/folder | Role |
-|---|---|---|
+|---|---|
 | `platformio.ini` | Board, pinned platform, flags, upload settings | 
+| `tools/build_version.py` | Required pre-build script; sets firmware version | 
 | `src/idf_component.yml` | Direct ESP-IDF component requirements | 
 | `dependencies.lock`, `dependencies.esp32.lock` | Exact S3/classic versions and registry hashes | 
 | `sdkconfig.defaults`, `sdkconfig.defaults.esp32s3`, `sdkconfig.defaults.esp32` | Common and target-specific framework configuration | 
